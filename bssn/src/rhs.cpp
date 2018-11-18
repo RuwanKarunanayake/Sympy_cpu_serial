@@ -136,6 +136,7 @@ bssn::timer::t_deriv.stop();
 bssn::timer::t_rhs.start();
 
   //cout << "begin loop" << endl;
+  #pragma omp parallel for schedule(static)
   for (unsigned int k = 3; k < nz-3; k++) {
       z = pmin[2] + k*hz;
     for (unsigned int j = 3; j < ny-3; j++) {
@@ -239,7 +240,7 @@ bssn::timer::t_deriv.stop();
 bssn::timer::t_rhs.start();
 
   const  double sigma = KO_DISS_SIGMA;
-
+  #pragma omp parallel for schedule(static)
   for (unsigned int k = 3; k < nz-3; k++) {
     for (unsigned int j = 3; j < ny-3; j++) {
       for (unsigned int i = 3; i < nx-3; i++) {

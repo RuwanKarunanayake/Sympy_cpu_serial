@@ -27,7 +27,7 @@ void deriv42_x(double * const  Dxu, const double * const  u,
   const int ke = sz[2]-1;
     const int n=1;
     
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
     for (int j = jb; j < je; j++) {
       for (int i = ib; i < ie; i++) {
@@ -105,10 +105,10 @@ void deriv42_y(double * const  Dyu, const double * const  u,
   const int ke = sz[2]-1;
 
     const int n=nx;
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
-    for (int i = ib; i < ie; i++) {
-      for (int j = jb; j < je; j++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         Dyu[pp] = (u[pp-2*nx] - 8.0*u[pp-nx] + 8.0*u[pp+nx] - u[pp+2*nx])*idy_by_12;
       }
@@ -181,10 +181,10 @@ void deriv42_z(double * const  Dzu, const double * const  u,
   const int ke = sz[2]-3;
 
   const int n = nx*ny;
-
-  for (int j = jb; j < je; j++) {
-    for (int i = ib; i < ie; i++) {
-      for (int k = kb; k < ke; k++) {
+  #pragma omp parallel for schedule(static)  
+  for (int k = kb; k < ke; k++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         Dzu[pp] = (u[pp-2*n] - 8.0*u[pp-n] + 8.0*u[pp+n] - u[pp+2*n]) * idz_by_12;
       }
@@ -259,7 +259,7 @@ void deriv42_xx(double * const  DxDxu, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
     for (int j = jb; j < je; j++) {
       for (int i = ib; i < ie; i++) {
@@ -345,10 +345,10 @@ void deriv42_yy(double * const  DyDyu, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
-    for (int i = ib; i < ie; i++) {
-      for (int j = jb; j < je; j++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         DyDyu[pp] = ( -u[pp-2*nx] + 16.0 * u[pp-nx] - 30.0 * u[pp]
                                + 16.0 * u[pp+nx] - u[pp+2*nx]
@@ -429,10 +429,10 @@ void deriv42_zz(double * const  DzDzu, const double * const  u,
 
   const int n = nx * ny;
 
-
-  for (int j = jb; j < je; j++) {
-    for (int i = ib; i < ie; i++) {
-      for (int k = kb; k < ke; k++) {
+  #pragma omp parallel for schedule(static)  
+  for (int k = kb; k < ke; k++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         DzDzu[pp] = ( - u[pp-2*n] + 16.0 * u[pp-n] - 30.0 * u[pp]
                    + 16.0 * u[pp+n] - u[pp+2*n] ) * idz_sqrd_by_12;
@@ -514,7 +514,7 @@ void deriv42adv_x(double * const  Dxu, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
     for (int j = jb; j < je; j++) {
       for (int i = ib; i < ie; i++) {
@@ -656,10 +656,10 @@ void deriv42adv_y(double * const  Dyu, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
-    for (int i = ib; i < ie; i++) {
-      for (int j = jb; j < je; j++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         if (betay[pp] > 0.0 ) {
           Dyu[pp] = ( -  3.0 * u[pp-nx]
@@ -799,10 +799,10 @@ void deriv42adv_z(double * const  Dzu, const double * const  u,
 
   const int n = nx * ny;
 
-
-  for (int j = jb; j < je; j++) {
-    for (int i = ib; i < ie; i++) {
-      for (int k = kb; k < ke; k++) {
+  #pragma omp parallel for schedule(static)  
+  for (int k = kb; k < ke; k++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
         int pp = IDX(i,j,k);
         if (betaz[pp] > 0.0 ) {
           Dzu[pp] = ( -  3.0 * u[pp-n]
@@ -941,10 +941,10 @@ void ko_deriv42_x(double * const  Du, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
     for (int j = jb; j < je; j++) {
-       for (int i = ib; i < ie; i++) {
+      for (int i = ib; i < ie; i++) {
           int pp = IDX(i,j,k);
           Du[pp] = pre_factor_6_dx *
                          (
@@ -1058,10 +1058,10 @@ void ko_deriv42_y(double * const  Du, const double * const  u,
   const int je = sz[1] - 3;
   const int ke = sz[2] - 3;
 
-
+  #pragma omp parallel for schedule(static)  
   for (int k = kb; k < ke; k++) {
-    for (int i = ib; i < ie; i++) {
-       for (int j = jb; j < je; j++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
           int pp = IDX(i,j,k);
           Du[pp] = pre_factor_6_dy *
                          (
@@ -1178,10 +1178,10 @@ void ko_deriv42_z(double * const  Du, const double * const  u,
 
   const int n = nx * ny;
 
-
-  for (int j = jb; j < je; j++) {
-    for (int i = ib; i < ie; i++) {
-       for (int k = kb; k < ke; k++) {
+  #pragma omp parallel for schedule(static)  
+  for (int k = kb; k < ke; k++) {
+    for (int j = jb; j < je; j++) {
+      for (int i = ib; i < ie; i++) {
           int pp = IDX(i,j,j);
           Du[IDX(i,j,j)] = pre_factor_6_dz *
                          (
